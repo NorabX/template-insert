@@ -13,10 +13,10 @@ Insert templates!
 
 * `}f{`: filename without extension
 * `}F{`: filename
-* `}p{`: absolute filepath
+* `}p{`: absolute file path
 * `}a{`: author (settings)
-* `}d{`: local date string
-* `}D{`: iso date string
+* `}d{`: local date string (default)
+* `}D{`: iso date string (default)
 * `}` + <i>any number</i> + `{`: local number variables
 * `}` + <i>any number</i> + `g{`: global number variables
 

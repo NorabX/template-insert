@@ -17,4 +17,4 @@ class TemplateInsertView
     @element
 
   setText: (name,scopeName) ->
-    @element.children[0].textContent = name + " scope name: " + scopeName
+    @element.children[0].textContent = "#{name} scope name: #{scopeName}"

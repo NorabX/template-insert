@@ -1,34 +1,19 @@
 fs = require('fs');
 TemplateInsertView = require './template-insert-view'
+Config = require './config'
 {CompositeDisposable} = require 'atom'
 
 module.exports = TemplateInsert =
   templateInsertView: null
   modalPanel: null
   subscriptions: null
-  config:
-    templateDirectory:
-      type: 'string'
-      description: 'Directory that contains all template files'
-      default: atom.packages.resolvePackagePath('template-insert') + '/templates'
-    author:
-      type: 'string'
-      description: 'Text for }a{ variable'
-      default: 'Author'
-    globalNumberVariables:
-      type: 'string'
-      description: 'Set global variables }0g{, }1g{, ...'
-      default: ''
-    showTemplateError:
-      type: 'boolean'
-      description: 'Shows an error when a template is missing'
-      default: true
-
+  config: new Config().get()
+  conf: null
 
   activate: (state) ->
     @templateInsertView = new TemplateInsertView(state.templateInsertViewState)
     @modalPanel = atom.workspace.addModalPanel(item: @templateInsertView.getElement(), visible: false)
-
+    @conf = new Config()
     @subscriptions = new CompositeDisposable
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'template-insert:toggle': => @toggle()
@@ -72,7 +57,7 @@ module.exports = TemplateInsert =
         @modalPanel.show()
 
   insert: (n, global) ->
-    tempDir = atom.config.get 'template-insert.templateDirectory'
+    tempDir = @getConfig 'templateDirectory'
 
     fs.exists tempDir, (exists) ->
       if exists
@@ -80,13 +65,13 @@ module.exports = TemplateInsert =
         editor = atom.workspace.getActiveTextEditor()
         if editor
           scope = if global then 'global' else editor.getGrammar().scopeName
-          file = tempDir + '/' + scope + '.' + n
+          file = "#{tempDir}/#{scope}.#{n}"
 
           fs.readFile file, 'utf8', (err, data) ->
-            if err then if showError then atom.notifications.addError '<h2>Template is missing</h2>Add ' + file
+            if err then if showError then atom.notifications.addError "<h2>Template is missing</h2>Add #{file}"
             else editor.insertText TemplateInsert.replaceVariables data
 
-      else atom.notifications.addError "<h2>Template Directory Error</h2>Directory " + tempDir + " doesn't exist"
+      else atom.notifications.addError "<h2>Template Directory Error</h2>Directory #{tempDir} doesn't exist"
 
   replaceVariables:(data) ->
     editor = atom.workspace.getActiveTextEditor()
@@ -96,21 +81,25 @@ module.exports = TemplateInsert =
       data = data.replace /}f{/g, title.substring 0, title.lastIndexOf '.'
       data = data.replace /}F{/g, title
       data = data.replace /}p{/g, editor.getPath()
-      data = data.replace /}a{/g, atom.config.get 'template-insert.author'
-      data = data.replace /}D{/g, date.toISOString()
-      data = data.replace /}d{/g, date.toLocaleString()
+      data = data.replace /}a{/g, @getConfig 'author'
+      data = data.replace /}d{/g, @conf.getDate @getConfig 'dateStringOne'
+      data = data.replace /}D{/g, @conf.getDate @getConfig 'dateStringTwo'
 
-      data = @replaceNumberVariables editor.getSelectedText(), data, false
-      data = @replaceNumberVariables atom.config.get('template-insert.globalNumberVariables'), data, true
+      data = @replaceNumberVariables(editor.getSelectedText(), data, false)
+      data = @replaceNumberVariables(@getConfig('globalNumberVariables'), data, true)
 
       data
 
   replaceNumberVariables: (text, data,  global) ->
     if text isnt '' and text?
-      split = text.split ';'
+      delimiter = if global then @getConfig('globalVariableDelimiter') else @getConfig('localVariableDelimiter')
+      split = text.split delimiter
       for n in [0..split.length-1]
         temp = if global then 'g' else ''
-        regex = new RegExp '}' + n + temp + '{', 'g'
+        regex = new RegExp "}#{n}#{temp}{", 'g'
         data = data.replace regex, split[n]
 
     data
+
+  getConfig: (name) ->
+    atom.config.get("template-insert.#{name}")
