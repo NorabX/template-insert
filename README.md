@@ -39,16 +39,16 @@ Insert templates!
 
 Edit your settings.
 
-![img1](img/eg1.png)
+![img1](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg1.png)
 
 Make a template. (example in the template folder)
 
-![img2](img/eg2.png)
+![img2](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg2.png)
 
 Type something like this and select the text.
 
-![img3](img/eg3.png)
+![img3](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg3.png)
 
 Press `ctrl-1` and you get:
 
-![img1](img/eg4.png)
+![img4](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg4.png)
