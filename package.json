@@ -1,0 +1,40 @@
+{
+  "name": "template-insert",
+  "main": "./lib/template-insert",
+  "version": "0.0.0",
+  "description": "Insert templates!",
+  "keywords": [
+    "template",
+    "insert"
+  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "template-insert:toggle",
+      "template-insert:insert1",
+      "template-insert:insert2",
+      "template-insert:insert4",
+      "template-insert:insert4",
+      "template-insert:insert5",
+      "template-insert:insert6",
+      "template-insert:insert7",
+      "template-insert:insert8",
+      "template-insert:insert9",
+      "template-insert:insert0",
+      "template-insert:insert1g",
+      "template-insert:insert2g",
+      "template-insert:insert3g",
+      "template-insert:insert4g",
+      "template-insert:insert5g",
+      "template-insert:insert6g",
+      "template-insert:insert7g",
+      "template-insert:insert8g",
+      "template-insert:insert9g",
+      "template-insert:insert0g"
+    ]
+  },
+  "repository": "https://github.com/NorabX/template-insert",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  }
+}
