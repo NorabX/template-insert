@@ -62,3 +62,15 @@ class Config
       description: 'Shows an error when a template is missing'
       default: true
       order: 7
+    recursionVariableLevels:
+      type: 'integer'
+      min: 0
+      max: 100
+      default: 0
+      order: 8
+    recursionPathLevels:
+      type: 'integer'
+      min: 0
+      max: 100
+      default: 0
+      order: 9

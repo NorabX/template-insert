@@ -17,8 +17,9 @@ Insert templates!
 * `}a{`: author (settings)
 * `}d{`: local date string (default)
 * `}D{`: iso date string (default)
-* `}` + <i>any number</i> + `{`: local number variables
-* `}` + <i>any number</i> + `g{`: global number variables
+* `}` + `0-n` + `{`: local number variables
+* `}` + `0-n` + `g{`: global number variables
+* `}!` + <i>file-path</i> + `!{`: file text import
 
 ## Examples
 #### Markdown Template
@@ -33,7 +34,7 @@ Insert templates!
 
 * Insert e.g. `A long long default text` in the text file and save it.
 
-* Open any file in press `ctrl-alt-1`.
+* Open any file and press `ctrl-alt-1`.
 
 #### Java Template with Variables
 
