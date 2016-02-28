@@ -1,4 +1,6 @@
-fs = require('fs');
+fs = require('fs')
+os = require('os')
+CSON = require 'season'
 TemplateInsertView = require './template-insert-view'
 Config = require './config'
 {CompositeDisposable} = require 'atom'
@@ -74,17 +76,23 @@ module.exports = TemplateInsert =
 
       else atom.notifications.addError "<h2>Template Directory Error</h2>Directory #{tempDir} doesn't exist"
 
-  replaceVariables:(data) ->
+    @test()
+
+  test: ->
+
+
+  replaceVariables: (data) ->
     editor = atom.workspace.getActiveTextEditor()
     if editor
       title = editor.getTitle()
 
       reclevels = 0
       while true
+        data = @replacePaths data
+
         data = @replaceNumberVariables(editor.getSelectedText(), data, false)
         data = @replaceNumberVariables(@getConfig('globalNumberVariables'), data, true)
-
-        data = @replacePaths data
+        data = @replaceCustomVariables(data, editor.getGrammar().scopeName)
 
         data = data.replace /}f{/g, title.substring 0, title.lastIndexOf '.'
         data = data.replace /}F{/g, title
@@ -92,6 +100,15 @@ module.exports = TemplateInsert =
         data = data.replace /}a{/g, @getConfig 'author'
         data = data.replace /}d{/g, @conf.getDate @getConfig 'dateStringOne'
         data = data.replace /}D{/g, @conf.getDate @getConfig 'dateStringTwo'
+        data = data.replace /}oa{/g, os.arch()
+        data = data.replace /}oh{/g, os.homedir()
+        data = data.replace /}oH{/g, os.hostname()
+        data = data.replace /}op{/g, os.platform()
+        data = data.replace /}or{/g, os.release()
+        data = data.replace /}on{/g, os.type()
+        data = data.replace /}ot{/g, os.tmpdir()
+
+        data = @replacePaths data
 
         break if reclevels >= @getConfig('recursionVariableLevels')
         reclevels++
@@ -106,6 +123,22 @@ module.exports = TemplateInsert =
         temp = if global then 'g' else ''
         regex = new RegExp "}#{n}#{temp}{", 'g'
         data = data.replace regex, split[n]
+
+    data
+
+  replaceCustomVariables: (data, scopeName) ->
+    if fs.existsSync @getConfig('customVariablesFile')
+      try
+        customvars = CSON.readFileSync(@getConfig('customVariablesFile'))
+
+        if customvars?
+          for scope in Object.keys(customvars)
+            for key in Object.keys(customvars[scope])
+              regex = new RegExp "}=#{key}{", 'g'
+              if scope is 'global' or scope is scopeName
+                data = data.replace regex, customvars[scope][key]
+
+      catch err then atom.notifications.addError "<h2>Custom Variables File Syntax Error</h2>#{err}"
 
     data
 

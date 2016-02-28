@@ -1,3 +1,7 @@
+## 1.3.0 Variable Update
+* Custom Variables
+* New variables for OS functions
+
 ## 1.2.0 - File Import Update
 * Templates replace file path with file text
 
