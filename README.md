@@ -1,7 +1,7 @@
 # template-insert
 [![version](https://img.shields.io/apm/v/template-insert.svg)](https://atom.io/packages/template-insert) &nbsp;
 [![downloads](https://img.shields.io/apm/dm/template-insert.svg)](https://atom.io/packages/template-insert) &nbsp;
-[![dependencies](https://david-dm.org/norbax/template-insert.svg)](https://david-dm.org/norabx/template-insert) &nbsp;
+[![Dependency Status](https://david-dm.org/norabx/template-insert.svg)](https://david-dm.org/norabx/template-insert) &nbsp;
 [![license](https://img.shields.io/apm/l/template-insert.svg)](https://github.com/NorabX/template-insert/blob/master/LICENSE.md)
 
 Insert templates! Includes i.a. current timestamp support.
