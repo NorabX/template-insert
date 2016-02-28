@@ -75,12 +75,12 @@ Press `ctrl-1` and you get:
 
 Create `vars.cson` in the template folder.
 
-![img5](img/eg5.png)
+![img5](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg5.png)
 
 Create a new template for CoffeeScript.
 
-![img6](img/eg6.png)
+![img6](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg6.png)
 
 Open a CoffeeScript file and press `ctrl-1`:
 
-![img7](img/eg7.png)
+![img7](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg7.png)
