@@ -1,5 +1,6 @@
-fs = require('fs')
-os = require('os')
+fs = require 'fs'
+os = require 'os'
+crypto = require 'crypto'
 CSON = require 'season'
 TemplateInsertView = require './template-insert-view'
 Config = require './config'
@@ -76,37 +77,20 @@ module.exports = TemplateInsert =
 
       else atom.notifications.addError "<h2>Template Directory Error</h2>Directory #{tempDir} doesn't exist"
 
-    @test()
-
-  test: ->
-
-
   replaceVariables: (data) ->
     editor = atom.workspace.getActiveTextEditor()
     if editor
-      title = editor.getTitle()
 
       reclevels = 0
       while true
         data = @replacePaths data
 
-        data = @replaceNumberVariables(editor.getSelectedText(), data, false)
-        data = @replaceNumberVariables(@getConfig('globalNumberVariables'), data, true)
-        data = @replaceCustomVariables(data, editor.getGrammar().scopeName)
-
-        data = data.replace /}f{/g, title.substring 0, title.lastIndexOf '.'
-        data = data.replace /}F{/g, title
-        data = data.replace /}p{/g, editor.getPath()
-        data = data.replace /}a{/g, @getConfig 'author'
-        data = data.replace /}d{/g, @conf.getDate @getConfig 'dateStringOne'
-        data = data.replace /}D{/g, @conf.getDate @getConfig 'dateStringTwo'
-        data = data.replace /}oa{/g, os.arch()
-        data = data.replace /}oh{/g, os.homedir()
-        data = data.replace /}oH{/g, os.hostname()
-        data = data.replace /}op{/g, os.platform()
-        data = data.replace /}or{/g, os.release()
-        data = data.replace /}on{/g, os.type()
-        data = data.replace /}ot{/g, os.tmpdir()
+        data = @replaceNumberVariables editor.getSelectedText(), data, false
+        data = @replaceNumberVariables @getConfig('globalNumberVariables'), data, true
+        data = @replaceCustomVariables data, editor.getGrammar().scopeName
+        data = @replaceStandardVariables data, editor
+        data = @replaceOSVariables data
+        data = @replaceHashVariables data
 
         data = @replacePaths data
 
@@ -123,6 +107,52 @@ module.exports = TemplateInsert =
         temp = if global then 'g' else ''
         regex = new RegExp "}#{n}#{temp}{", 'g'
         data = data.replace regex, split[n]
+
+    data
+
+  replaceStandardVariables: (data, editor) ->
+    title = editor.getTitle()
+    data = data.replace /}f{/g, title.substring 0, title.lastIndexOf '.'
+    data = data.replace /}F{/g, title
+    data = data.replace /}p{/g, editor.getPath()
+    data = data.replace /}a{/g, @getConfig 'author'
+    data = data.replace /}d{/g, @conf.getDate @getConfig 'dateStringOne'
+    data = data.replace /}D{/g, @conf.getDate @getConfig 'dateStringTwo'
+
+    data
+
+  replaceOSVariables: (data) ->
+    data = data.replace /}oa{/g, os.arch()
+    data = data.replace /}oh{/g, os.homedir()
+    data = data.replace /}oH{/g, os.hostname()
+    data = data.replace /}op{/g, os.platform()
+    data = data.replace /}or{/g, os.release()
+    data = data.replace /}on{/g, os.type()
+    data = data.replace /}ot{/g, os.tmpdir()
+
+    data
+
+  replaceHashVariables: (data) ->
+    for hash in crypto.getHashes()
+      if hash
+        regex = new RegExp "}#{hash}=.*=(bytes|binary|hex|base64){", 'g'
+        match = data.match(regex)
+        if match
+          for m in match
+            value = m.slice m.indexOf("}#{hash}=") + 2 + hash.length, m.lastIndexOf '='
+            digest = m.slice m.lastIndexOf('=') + 1, m.length - 1
+            regex2 = new RegExp "}#{hash}=#{value}=#{digest}{", 'g'
+
+            digest = if digest is 'bytes' then '' else digest
+            replace = crypto.createHash(hash).update(value).digest(digest)
+
+            if digest is ''
+              temp = ''
+              for b in replace
+                temp += "#{b} "
+              replace = temp
+
+            data = data.replace regex2, replace
 
     data
 

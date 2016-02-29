@@ -25,8 +25,6 @@ Insert templates! Includes i.a. current timestamp support.
 * `}` + `0-n` + `g{`: global number variables
 * `}!` + <i>`file-path`</i> + `!{`: file text import
 * `}=` + <i>`any charater`</i> + `{`: custom variables  
-
-
 * `}oa{`: operating system CPU architecture
 * `}oh{`: home directory of the current user
 * `}oH{`: hostname of the operating system
