@@ -1,3 +1,8 @@
+## 1.4.0 Command Update
+* Shell Command Variables
+
+## 1.3.3 Hash Code Variables
+
 ## 1.3.0 Variable Update
 * Custom Variables
 * New variables for OS functions

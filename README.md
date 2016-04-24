@@ -32,6 +32,8 @@ Insert templates! Includes i.a. current timestamp support.
 * `}or{`: operating system release
 * `}on{`: operating system name
 * `}ot{`: default directory for temporary files
+* `}>` + <i>`shell command`</i> + `<{`: command variables
+* `}` <i>`hashname`</i> `=` <i>`any charater`</i> `=` <i>`bytes|binary|hex|base64`</i> `{`: hash code variables
 
 ## Changelog
 Click [here](https://github.com/NorabX/template-insert/blob/master/CHANGELOG.md) to read it.
@@ -82,3 +84,6 @@ Create a new template for CoffeeScript.
 Open a CoffeeScript file and press `ctrl-1`:
 
 ![img7](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg7.png)
+
+#### More Examples
+More examples are in the examples folder

@@ -1,5 +1,6 @@
 fs = require 'fs'
 os = require 'os'
+cproc = require 'child_process'
 crypto = require 'crypto'
 CSON = require 'season'
 TemplateInsertView = require './template-insert-view'
@@ -91,6 +92,7 @@ module.exports = TemplateInsert =
         data = @replaceStandardVariables data, editor
         data = @replaceOSVariables data
         data = @replaceHashVariables data
+        data = @replaceCommandVariables data
 
         data = @replacePaths data
 
@@ -195,6 +197,30 @@ module.exports = TemplateInsert =
       else
         reclevels = 0
         data = data.replace regex, "}#{path}{"
+
+    data
+
+  replaceCommandVariables: (data) ->
+    while true
+      start = data.search /}>/g
+      break if start is -1
+
+      end = data.search /<{/g
+      command = data.slice start + 2, end
+
+      try
+        child = cproc.execSync command
+        child = child.slice 0, -1
+      catch error
+        child = []
+
+      commandreg = command.replace /[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"
+      regex = new RegExp "}>#{commandreg}<{", "g"
+
+      if child.length > 0
+        data = data.replace regex, child.toString()
+      else
+        data = data.replace regex, "}?#{command}?{"
 
     data
 
