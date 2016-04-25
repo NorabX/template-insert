@@ -73,10 +73,13 @@ module.exports = TemplateInsert =
           file = "#{tempDir}/#{scope}.#{n}"
 
           fs.readFile file, 'utf8', (err, data) ->
-            if err then if showError then atom.notifications.addError "<h2>Template is missing</h2>Add #{file}"
-            else editor.insertText TemplateInsert.replaceVariables data
-
-      else atom.notifications.addError "<h2>Template Directory Error</h2>Directory #{tempDir} doesn't exist"
+            if err
+              file = "#{tempDir}/#{scope}.#{n}.atoemp"
+              fs.readFile file, 'utf8', (err, data) ->
+                if err and showError then TemplateInsert.addError "Template is missing", "Add #{file}"
+                else TemplateInsert.insertData editor, data
+            else TemplateInsert.insertData editor, data
+      else TemplateInsert.addError "Template Directory Error", "Directory #{tempDir} doesn't exist"
 
   replaceVariables: (data) ->
     editor = atom.workspace.getActiveTextEditor()
@@ -170,7 +173,7 @@ module.exports = TemplateInsert =
               if scope is 'global' or scope is scopeName
                 data = data.replace regex, customvars[scope][key]
 
-      catch err then atom.notifications.addError "<h2>Custom Variables File Syntax Error</h2>#{err}"
+      catch err then @addError "Custom Variables File Syntax Error", "#{err}"
 
     data
 
@@ -211,8 +214,7 @@ module.exports = TemplateInsert =
       try
         child = cproc.execSync command
         child = child.slice 0, -1
-      catch error
-        child = []
+      catch error then child = []
 
       commandreg = command.replace /[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"
       regex = new RegExp "}>#{commandreg}<{", "g"
@@ -226,3 +228,9 @@ module.exports = TemplateInsert =
 
   getConfig: (name) ->
     atom.config.get("template-insert.#{name}")
+
+  insertData: (editor,data) ->
+    editor.insertText @replaceVariables data
+
+  addError: (title,msg) ->
+    atom.notifications.addError "<h2>#{title}</h2>#{msg}"
