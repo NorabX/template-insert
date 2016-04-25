@@ -1,0 +1,18 @@
+"scopeName": "source.atoemp"
+"name": "Atoemp"
+"fileTypes": ["atoemp"]
+"patterns": [
+  {
+    "match": "\}[0-9]g?\{"
+    "name": "constant.numeric.integer.hexadecimal.python"
+  },
+  {
+    "captures":
+      "1":
+        "name": "variable.parameter.function.coffee"
+      "2":
+        "name": "storage.type.function.coffee"
+    "match": "\}(.*)=(.*)=.*\{"
+    "name": "constant.numeric.integer.hexadecimal.python"
+  }
+]

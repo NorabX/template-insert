@@ -1,0 +1,52 @@
+".source.atoemp":
+  "Local Variable":
+    "prefix": "l"
+    "body": "}${1:number}{${0:}"
+  "Global Variable":
+    "prefix": "g"
+    "body": "}${1:number}g{${0:}"
+  "Path Variable":
+    "prefix": "p"
+    "body": "}!${1:path}!{${0:}"
+  "Custom Variable":
+    "prefix": "c"
+    "body": "}=${1:name}{${0:}"
+  "Hash Code Variable":
+    "prefix": "h"
+    "body": "}${1:hashname}=${2:value}=${3:digest}{${0:}"
+  "Shell Command Variable":
+    "prefix": "sc"
+    "body": "}>${1:command}<{${0:}"
+  "Author Variable":
+    "prefix": "a"
+    "body": "}a{${0:}"
+  "Date d Variable":
+    "prefix": "d"
+    "body" : "}d{${0:}"
+  "Date D Variable":
+    "prefix": "du"
+    "body": "}D{${0:}"
+  "Filename f Variable":
+    "prefix": "f"
+    "body": "}f{${0:}"
+  "Filename F Variable":
+    "prefix": "fu"
+    "body": "}F{${0:}"
+  "OS CPU Architecture Variable":
+    "prefix": "oa"
+    "body": "}oa{${0:}"
+  "Home Directory Variable":
+    "prefix": "oh"
+    "body": "}oh{${0:}"
+  "OS Hostname Variable":
+    "prefix": "ohn"
+    "body": "}oH{${0:}"
+  "OS Platform Variable":
+    "prefix": "op"
+    "body": "}op{${0:}"
+  "OS Name Variable":
+    "prefix": "on"
+    "body": "}on{${0:}"
+  "Temp Directory Variable":
+    "prefix": "ot"
+    "body": "}ot{${0:}"
