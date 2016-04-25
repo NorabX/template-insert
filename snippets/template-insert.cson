@@ -6,7 +6,7 @@
     "prefix": "g"
     "body": "}${1:number}g{${0:}"
   "Path Variable":
-    "prefix": "p"
+    "prefix": "fp"
     "body": "}!${1:path}!{${0:}"
   "Custom Variable":
     "prefix": "c"
@@ -32,6 +32,9 @@
   "Filename F Variable":
     "prefix": "fu"
     "body": "}F{${0:}"
+  "Absolute Filepath Variable":
+    "prefix": "p"
+    "body": "}p{${0:}"
   "OS CPU Architecture Variable":
     "prefix": "oa"
     "body": "}oa{${0:}"
