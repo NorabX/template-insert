@@ -1,3 +1,32 @@
+#Local and Global Variable
+}0{ }0g{
+
+#Standard Variables
+}a{
+}d{
+}D{
+}f{
+}F{
+}p{
+}td{  
+}v{
+}V{
+}vd{
+
+#Custom Variable
+}=os{
+
+#File Variable
+}!}td{source.coffee.1.atoemp!{
+
+#OS Varibales
+}oa{
+}oh{
+}oH{
+}on{
+}op{
+}ot{
+
 #Hash Variable Examples
 }md5=MD5 HASH=bytes{
 }sha1=SHA1 HASH=binary{

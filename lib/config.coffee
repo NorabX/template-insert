@@ -27,56 +27,56 @@ class Config
       type: 'string'
       description: 'Directory that contains all template files'
       default: @defaultTemplateFolder
-      order: 0
+      order: 10
     customVariablesFile:
       type: 'string'
       description: 'File that contains all custom variables'
       default: @defaultTemplateFolder + "/vars.cson"
-      order: 1
+      order: 20
     author:
       type: 'string'
       description: 'Text for }a{ variable'
       default: 'Author'
-      order: 2
+      order: 30
     dateStringOne:
       type: 'string'
       description: 'Date string for }d{'
       default: @initDate.toLocaleString()
       enum: @dateArray
-      order: 3
+      order: 40
     dateStringTwo:
       type: 'string'
       description: 'Date string for }D{'
       default: @initDate.toISOString()
       enum: @dateArray
-      order: 4
+      order: 50
     globalNumberVariables:
       type: 'string'
       description: 'Set global variables }0g{, }1g{, ...'
       default: ''
-      order: 5
+      order: 60
     localVariableDelimiter:
       type: 'string'
       default: ';'
-      order: 6
+      order: 70
     globalVariableDelimiter:
       type: 'string'
       default: ';'
-      order: 7
+      order: 80
     showTemplateError:
       type: 'boolean'
       description: 'Shows an error when a template is missing'
       default: true
-      order: 8
+      order: 90
     recursionVariableLevels:
       type: 'integer'
       min: 0
       max: 100
-      default: 0
-      order: 9
+      default: 1
+      order: 100
     recursionPathLevels:
       type: 'integer'
       min: 0
       max: 100
-      default: 0
-      order: 10
+      default: 1
+      order: 110

@@ -1,9 +1,15 @@
-## 1.4.0 Command Update
+## 2.0.0 - Atoemp Update
+* Read `.atoemp` template files
+* Grammar for `.atoemp` files
+* Snippets for `.atoemp` files
+* Some bugfixes and code restructuring
+
+## 1.4.0 - Command Update
 * Shell Command Variables
 
-## 1.3.3 Hash Code Variables
+## 1.3.3 - Hash Code Variables
 
-## 1.3.0 Variable Update
+## 1.3.0 - Variable Update
 * Custom Variables
 * New variables for OS functions
 

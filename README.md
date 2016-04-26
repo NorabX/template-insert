@@ -1,4 +1,5 @@
-# template-insert
+![logo](https://raw.githubusercontent.com/NorabX/template-insert/master/img/atoemp_logo.gif)
+
 [![version](https://img.shields.io/apm/v/template-insert.svg)](https://atom.io/packages/template-insert) &nbsp;
 [![downloads](https://img.shields.io/apm/dm/template-insert.svg)](https://atom.io/packages/template-insert) &nbsp;
 [![Dependency Status](https://david-dm.org/norabx/template-insert.svg)](https://david-dm.org/norabx/template-insert) &nbsp;
@@ -32,6 +33,10 @@ Insert templates! Includes i.a. current timestamp support.
 * `}or{`: operating system release
 * `}on{`: operating system name
 * `}ot{`: default directory for temporary files
+* `}td{`: template directory
+* `}v{`: custom variables filename
+* `}V{`: absolute path of custom variables file
+* `}vd{`: directory of custom varibales file
 * `}>` + <i>`shell command`</i> + `<{`: command variables
 * `}` <i>`hashname`</i> `=` <i>`any charater`</i> `=` <i>`bytes|binary|hex|base64`</i> `{`: hash code variables
 
@@ -40,14 +45,14 @@ Click [here](https://github.com/NorabX/template-insert/blob/master/CHANGELOG.md)
 
 ## Examples
 #### Markdown Template
-* Create a text file `source.gfm.1` in the templates folder (defined in the package settings).
+* Create a text file `source.gfm.1.atoemp` (or `source.gfm.1`) in the templates folder (defined in the package settings).
 
 * Insert e.g. `# README FILE` in the text file and save it.
 
 * Open a .md file and press `ctrl-1`.
 
 #### Global Template
-* Create a text file `global.1` in the template folder.
+* Create a text file `global.1.atoemp` in the template folder.
 
 * Insert e.g. `A long long default text` in the text file and save it.
 

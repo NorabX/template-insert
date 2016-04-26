@@ -6,7 +6,7 @@
     "captures":
       "1":
         "name": "punctuation.definition.string.atoemp"
-    "match": "\}([0-9]g?|[adDfFp]|o[ahHnpt])\{"
+    "match": "\}([0-9]g?|[adDfFpvV]|o[ahHnpt]|td|vd)\{"
     "name": "variable.atoemp"
   },
   {

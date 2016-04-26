@@ -35,6 +35,18 @@
   "Absolute Filepath Variable":
     "prefix": "p"
     "body": "}p{${0:}"
+  "Template Directory Variable":
+    "prefix": "td"
+    "body": "}td{${0:}"
+  "Custom Variables Filename Variable":
+    "prefix": "v"
+    "body": "}v{${0:}"
+  "Custom Variables Absolute Path Variable":
+    "prefix": "vu"
+    "body": "}V{${0:}"
+  "Custom Variables File Directory Variable":
+    "prefix": "vd"
+    "body": "}vd{${0:}"
   "OS CPU Architecture Variable":
     "prefix": "oa"
     "body": "}oa{${0:}"
