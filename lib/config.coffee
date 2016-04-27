@@ -2,6 +2,7 @@ module.exports =
 class Config
   constructor: () ->
     @defaultTemplateFolder = atom.packages.resolvePackagePath('template-insert') + '/templates'
+    @defaultStructureFolder = atom.packages.resolvePackagePath('template-insert') + '/structures'
     @initDate = new Date(1234567891011)
     @dateArray = @getDateArray(@initDate)
 
@@ -33,6 +34,11 @@ class Config
       description: 'File that contains all custom variables'
       default: @defaultTemplateFolder + "/vars.cson"
       order: 20
+    structureDirectory:
+      type: 'string'
+      description: 'Directory that contains all structure files'
+      default: @defaultStructureFolder
+      order: 25
     author:
       type: 'string'
       description: 'Text for }a{ variable'

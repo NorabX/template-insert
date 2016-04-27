@@ -1,12 +1,12 @@
 "scopeName": "source.atoemp"
 "name": "Atoemp"
-"fileTypes": ["atoemp"]
+"fileTypes": ["atp","atoemp","atps","atoemps"]
 "patterns": [
   {
     "captures":
       "1":
         "name": "punctuation.definition.string.atoemp"
-    "match": "\}([0-9]g?|[adDfFpvV]|o[ahHnpt]|td|vd)\{"
+    "match": "\}([0-9]g?|[adDfFpvV]|o[ahHnpt]|[stv]d)\{"
     "name": "variable.atoemp"
   },
   {

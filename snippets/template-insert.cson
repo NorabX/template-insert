@@ -35,6 +35,9 @@
   "Absolute Filepath Variable":
     "prefix": "p"
     "body": "}p{${0:}"
+  "Structure Directory Variable":
+    "prefix": "sd"
+    "body": "}sd{${0:}"
   "Template Directory Variable":
     "prefix": "td"
     "body": "}td{${0:}"

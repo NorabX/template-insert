@@ -4,6 +4,7 @@ cproc = require 'child_process'
 crypto = require 'crypto'
 CSON = require 'season'
 Config = require './config'
+utils = require './utils'
 
 module.exports =
 class Replacer
@@ -11,52 +12,63 @@ class Replacer
     @conf = new Config()
 
   insert: (n, global) ->
-    tempDir = @getConfig 'templateDirectory'
+    tempDir = utils.getConfig 'templateDirectory'
     self = this
 
-    fs.exists tempDir, (exists) ->
-      if exists
-        showError = atom.config.get 'template-insert.showTemplateError'
-        editor = atom.workspace.getActiveTextEditor()
-        if editor
-          scope = if global then 'global' else editor.getGrammar().scopeName
-          file = "#{tempDir}/#{scope}.#{n}"
+    fs.stat tempDir, (err, stats) ->
+      if err then utils.addError "Template Directory Error", "Directory #{tempDir} doesn't exist"
+      else
+        if stats.isDirectory()
+          showError = utils.getConfig 'template-insert.showTemplateError'
+          editor = atom.workspace.getActiveTextEditor()
+          if editor
+            scope = if global then 'global' else editor.getGrammar().scopeName
+            file = "#{tempDir}/#{scope}.#{n}"
+            fileexts = ['','.atp','.atoemp']
+            duplicates = []
 
-          fs.readFile file, 'utf8', (err, data) ->
-            if err
-              file = "#{tempDir}/#{scope}.#{n}.atoemp"
-              fs.readFile file, 'utf8', (err, data) ->
-                if err and showError then self.addError "Template is missing", "Add #{file}"
-                else self.insertData editor, data
-            else self.insertData editor, data
-      else @self.addError "Template Directory Error", "Directory #{tempDir} doesn't exist"
+            for ext in fileexts
+              filename = "#{file}#{ext}"
+              try
+                fs.accessSync filename
+                duplicates.push(filename)
+                break if duplicates.length > 1
+              catch e then console.log "#{filename} doesn't exist"
 
-  replaceVariables: (data) ->
-    editor = atom.workspace.getActiveTextEditor()
-    if editor
+            if duplicates.length is 1
+              fs.readFile duplicates[0], 'utf8', (err, data) ->
+                if err then if showError then utils.addError "Template is missing", "Add #{file}"
+                else self.insertData data, editor
+            else utils.addError "Template Duplicates", "Same Templates with different extensions:\n\n #{duplicates[0]}\n\n #{duplicates[1]}"
 
-      reclevels = 0
-      while true
-        #data = @replacePaths data
+  replaceVariables: (data, editor, props) ->
+    scopeName = if editor then editor.getGrammar().scopeName else 'global'
+    title = if props.title? then props.title else editor.getTitle()
+    path = if props.path? then props.path else editor.getPath()
+    localvars = if props.vars? then props.vars else editor.getSelectedText()
 
-        data = @replaceNumberVariables editor.getSelectedText(), data, false
-        data = @replaceNumberVariables @getConfig('globalNumberVariables'), data, true
-        data = @replaceCustomVariables data, editor.getGrammar().scopeName
-        data = @replaceStandardVariables data, editor
-        data = @replaceOSVariables data
-        data = @replaceHashVariables data
-        data = @replaceCommandVariables data
+    reclevels = 0
+    while true
+      #data = @replacePaths data
 
-        data = @replacePaths data
+      data = @replaceNumberVariables localvars, data, false
+      data = @replaceNumberVariables utils.getConfig('globalNumberVariables'), data, true
+      data = @replaceCustomVariables data, scopeName
+      data = @replaceStandardVariables data, editor, title, path
+      data = @replaceOSVariables data
+      data = @replaceHashVariables data
+      data = @replaceCommandVariables data
 
-        break if reclevels >= @getConfig('recursionVariableLevels')
-        reclevels++
+      data = @replacePaths data
 
-      data
+      break if reclevels >= utils.getConfig('recursionVariableLevels')
+      reclevels++
+
+    data
 
   replaceNumberVariables: (text, data, global) ->
     if text isnt '' and text?
-      delimiter = if global then @getConfig('globalVariableDelimiter') else @getConfig('localVariableDelimiter')
+      delimiter = if global then utils.getConfig('globalVariableDelimiter') else utils.getConfig('localVariableDelimiter')
       split = text.split delimiter
       for n in [0..split.length-1]
         temp = if global then 'g' else ''
@@ -65,19 +77,19 @@ class Replacer
 
     data
 
-  replaceStandardVariables: (data, editor) ->
-    title = editor.getTitle()
+  replaceStandardVariables: (data, editor, title, path) ->
     data = data.replace /}f{/g, @replaceFilenameWithoutExtension title
     data = data.replace /}F{/g, title
-    data = data.replace /}p{/g, editor.getPath()
-    data = data.replace /}a{/g, @getConfig 'author'
-    data = data.replace /}d{/g, @conf.getDate @getConfig 'dateStringOne'
-    data = data.replace /}D{/g, @conf.getDate @getConfig 'dateStringTwo'
+    data = data.replace /}p{/g, path
+    data = data.replace /}a{/g, utils.getConfig 'author'
+    data = data.replace /}d{/g, @conf.getDate utils.getConfig 'dateStringOne'
+    data = data.replace /}D{/g, @conf.getDate utils.getConfig 'dateStringTwo'
 
-    data = data.replace /}td{/g, @getConfig('templateDirectory') + "/"
-    data = data.replace /}v{/g, @replaceVarFileName @getConfig('customVariablesFile')
-    data = data.replace /}V{/g, @getConfig('customVariablesFile')
-    data = data.replace /}vd{/g, @replaceVarFileDir @getConfig('customVariablesFile')
+    data = data.replace /}sd{/g, utils.getConfig('structureDirectory') + "/"
+    data = data.replace /}td{/g, utils.getConfig('templateDirectory') + "/"
+    data = data.replace /}v{/g, @replaceVarFileName utils.getConfig('customVariablesFile')
+    data = data.replace /}V{/g, utils.getConfig('customVariablesFile')
+    data = data.replace /}vd{/g, @replaceVarFileDir utils.getConfig('customVariablesFile')
     data
 
   replaceFilenameWithoutExtension: (title) ->
@@ -127,9 +139,9 @@ class Replacer
     data
 
   replaceCustomVariables: (data, scopeName) ->
-    if fs.existsSync @getConfig('customVariablesFile')
+    if fs.existsSync utils.getConfig('customVariablesFile')
       try
-        customvars = CSON.readFileSync(@getConfig('customVariablesFile'))
+        customvars = CSON.readFileSync(utils.getConfig('customVariablesFile'))
 
         if customvars?
           for scope in Object.keys(customvars)
@@ -138,7 +150,7 @@ class Replacer
               if scope is 'global' or scope is scopeName
                 data = data.replace regex, customvars[scope][key]
 
-      catch err then @addError "Custom Variables File Syntax Error", "#{err}"
+      catch err then utils.addError "Custom Variables File Syntax Error", "#{err}"
 
     data
 
@@ -157,7 +169,7 @@ class Replacer
       if tempPath is path then reclevels++
       else tempPath = path
 
-      if reclevels <= @getConfig('recursionPathLevels')
+      if reclevels <= utils.getConfig('recursionPathLevels')
         if fs.existsSync path
           data = data.replace regex, fs.readFileSync path
         else
@@ -191,11 +203,5 @@ class Replacer
 
     data
 
-  getConfig: (name) ->
-    atom.config.get("template-insert.#{name}")
-
-  insertData: (editor,data) ->
-    editor.insertText @replaceVariables data
-
-  addError: (title,msg) ->
-    atom.notifications.addError "<h2>#{title}</h2>#{msg}"
+  insertData: (data, editor) ->
+    editor.insertText @replaceVariables data, editor

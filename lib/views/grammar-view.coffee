@@ -1,5 +1,5 @@
 module.exports =
-class TemplateInsertView
+class GrammarView
   constructor: (serializedState) ->
 
     @element = document.createElement('div')

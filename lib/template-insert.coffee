@@ -1,19 +1,26 @@
-TemplateInsertView = require './template-insert-view'
+GrammarView = require './views/grammar-view'
 Config = require './config'
 Replacer = require './replacer'
+Structure = require './structure'
+
+utils = require './utils'
+fs = require 'fs'
+
 {CompositeDisposable} = require 'atom'
 
 module.exports = TemplateInsert =
-  templateInsertView: null
+  grammarView: null
   modalPanel: null
   subscriptions: null
   config: new Config().get()
-  insert: null
+  replacer: null
+  structure: null
 
   activate: (state) ->
-    @templateInsertView = new TemplateInsertView(state.templateInsertViewState)
-    @modalPanel = atom.workspace.addModalPanel(item: @templateInsertView.getElement(), visible: false)
+    @grammarView = new GrammarView(state.grammarViewState)
+    @modalPanel = atom.workspace.addModalPanel(item: @grammarView.getElement(), visible: false)
     @replacer = new Replacer
+    @structure = new Structure
     @subscriptions = new CompositeDisposable
 
     @subscriptions.add atom.commands.add 'atom-workspace',
@@ -39,13 +46,17 @@ module.exports = TemplateInsert =
       'template-insert:insert9g': => @replacer.insert(9,true)
       'template-insert:insert0g': => @replacer.insert(0,true)
 
+
+    atom.packages.onDidActivateInitialPackages () ->
+      TemplateInsert.createTreeContextMenu()
+
   deactivate: ->
     @modalPanel.destroy()
     @subscriptions.dispose()
-    @templateInsertView.destroy()
+    @grammarView.destroy()
 
   serialize: ->
-    templateInsertViewState: @templateInsertView.serialize()
+    grammarViewState: @grammarView.serialize()
 
   toggle: ->
     if @modalPanel.isVisible()
@@ -54,5 +65,35 @@ module.exports = TemplateInsert =
       editor = atom.workspace.getActiveTextEditor()
       if editor
         grammar = editor.getGrammar()
-        @templateInsertView.setText(grammar.name, grammar.scopeName)
+        @grammarView.setText(grammar.name, grammar.scopeName)
         @modalPanel.show()
+
+  createTreeContextMenu: () ->
+    exts = [".atps",".atoemps"]
+    regex = new RegExp ".*(#{exts[0]}|#{exts[1]})"
+    strcDir = utils.getConfig 'structureDirectory'
+    strcMenus = []
+    strcFiles = []
+
+    fs.readdir strcDir, (err, tempFiles) ->
+      if err then utils.addError "Structure Directory Error", "Directory #{strcDir} doesn't exist"
+      else
+        for file in tempFiles
+          if file.match(regex)
+            filename = file.substring 0, file.lastIndexOf(exts[if file.lastIndexOf(exts[0]) > -1 then 0 else 1])
+            com = "template-insert:create-structure-#{file}"
+
+            TemplateInsert.subscriptions.add atom.commands.add '.tree-view .selected',
+              com, (event) => TemplateInsert.structure.create(event,strcFiles)
+
+            strcFiles.push({file: file, command: com})
+            strcMenus.push({label: filename, command: com})
+
+      if strcMenus.length > 0
+        atom.contextMenu.add {
+            '.tree-view .selected':
+              [{
+                label: 'Create Structure',
+                submenu: strcMenus
+              }]
+        }
