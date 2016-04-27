@@ -3,7 +3,7 @@
   "main": "./lib/template-insert",
   "version": "1.4.0",
   "author": "NorabX",
-  "description": "Insert templates! Includes i.a. current timestamp support.",
+  "description": "Insert templates and file structres! Includes i.a. current timestamp support.",
   "keywords": [
     "template",
     "insert"

@@ -5,7 +5,7 @@
 [![Dependency Status](https://david-dm.org/norabx/template-insert.svg)](https://david-dm.org/norabx/template-insert) &nbsp;
 [![license](https://img.shields.io/apm/l/template-insert.svg)](https://github.com/NorabX/template-insert/blob/master/LICENSE.md)
 
-Insert templates! Includes i.a. current timestamp support.
+Insert templates and file structres! Includes i.a. current timestamp support.
 
 ## Usage
 #### Controls
@@ -33,6 +33,7 @@ Insert templates! Includes i.a. current timestamp support.
 * `}or{`: operating system release
 * `}on{`: operating system name
 * `}ot{`: default directory for temporary files
+* `}sd{`: structre directory
 * `}td{`: template directory
 * `}v{`: custom variables filename
 * `}V{`: absolute path of custom variables file
@@ -43,52 +44,8 @@ Insert templates! Includes i.a. current timestamp support.
 ## Changelog
 Click [here](https://github.com/NorabX/template-insert/blob/master/CHANGELOG.md) to read it.
 
-## Examples
-#### Markdown Template
-* Create a text file `source.gfm.1.atoemp` (or `source.gfm.1`) in the templates folder (defined in the package settings).
+## Template Examples
+Click [here](https://github.com/NorabX/template-insert/blob/master/examples/EXATP.md) to read it.
 
-* Insert e.g. `# README FILE` in the text file and save it.
-
-* Open a .md file and press `ctrl-1`.
-
-#### Global Template
-* Create a text file `global.1.atoemp` in the template folder.
-
-* Insert e.g. `A long long default text` in the text file and save it.
-
-* Open any file and press `ctrl-alt-1`.
-
-#### Java Template with Variables
-
-Edit your settings.
-
-![img1](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg1.png)
-
-Make a template. (example in the examples folder)
-
-![img2](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg2.png)
-
-Open a Java file and type something like this and select the text.
-
-![img3](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg3.png)
-
-Press `ctrl-1` and you get:
-
-![img4](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg4.png)
-
-#### CoffeeScript Template with Custom Varibales
-
-Create `vars.cson` in the template folder.
-
-![img5](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg5.png)
-
-Create a new template for CoffeeScript.
-
-![img6](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg6.png)
-
-Open a CoffeeScript file and press `ctrl-1`:
-
-![img7](https://raw.githubusercontent.com/NorabX/template-insert/master/img/eg7.png)
-
-#### More Examples
-More examples are in the examples folder
+## Structure Examples
+Click [here](https://github.com/NorabX/template-insert/blob/master/examples/EXATPS.md) to read it.

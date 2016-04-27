@@ -76,7 +76,8 @@ module.exports = TemplateInsert =
     strcFiles = []
 
     fs.readdir strcDir, (err, tempFiles) ->
-      if err then utils.addError "Structure Directory Error", "Directory #{strcDir} doesn't exist"
+      showError = utils.getConfig 'template-insert.showStructureDirectoryError'
+      if err then if showError then utils.addError "Structure Directory Error", "Directory #{strcDir} doesn't exist"
       else
         for file in tempFiles
           if file.match(regex)

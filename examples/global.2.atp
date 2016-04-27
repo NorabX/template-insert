@@ -1,40 +1,41 @@
 #Local and Global Variable
-}0{ }0g{
+First Local: }0{
+First Global: }0g{
 
 #Standard Variables
-}a{
-}d{
-}D{
-}f{
-}F{
-}p{
-}sd{
-}td{
-}v{
-}V{
-}vd{
+Author: }a{
+Date one: }d{
+Date two: }D{
+Current file without extension: }f{
+Current file: }F{
+Current file path: }p{
+Structure directory: }sd{
+Template directory: }td{
+Custom variables filename: }v{
+Custom variables absolute path: }V{
+Custom variables directory: }vd{
 
-#Custom Variable
+#Custom Variable "os"
 }=os{
 
-#File Variable
+#File Path Variable "tempdir/source.coffee.1.atoemp"
 }!}td{source.coffee.1.atoemp!{
 
 #OS Varibales
-}oa{
-}oh{
-}oH{
-}on{
-}op{
-}ot{
+operating system CPU architecture: }oa{
+home directory of the current user: }oh{
+hostname of the operating system: }oH{
+operating system name: }on{
+operating system platform: }op{
+default directory for temporary files: }ot{
+operating system release: }or{
 
 #Hash Variable Examples
-}md5=MD5 HASH=bytes{
-}sha1=SHA1 HASH=binary{
-}sha512=SHA512 HASH=hex{
-}whirlpool=WHIRLPOOL HASH=base64{
+md5 hash bytes of template: }md5=template=bytes{
+sha1 hash binary of template: }sha1=template=binary{
+sha512 hash hex of template: }sha512=template=hex{
+whirlpool hash base64 of template: }whirlpool=template=base64{
 
 #Command Variable Examples
-}>java -version 2>&1 | head -1<{
-}>node -v<{
-}>node -ve<{
+java version: }>java -version 2>&1 | head -1<{
+node version: }>node -v<{

@@ -1,0 +1,11 @@
+express = require "express"
+
+app = express()
+ip = }0{
+port = }1{
+
+app.listen port, ip, () ->
+  console.log "Server start on: #{ip}:#{port}"
+
+app.get "/", (req,res) ->
+  res.sendfile "#{__dirname}/views/index.html"

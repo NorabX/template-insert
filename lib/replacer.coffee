@@ -43,9 +43,9 @@ class Replacer
 
   replaceVariables: (data, editor, props) ->
     scopeName = if editor then editor.getGrammar().scopeName else 'global'
-    title = if props.title? then props.title else editor.getTitle()
-    path = if props.path? then props.path else editor.getPath()
-    localvars = if props.vars? then props.vars else editor.getSelectedText()
+    title = if props?.title? then props.title else editor.getTitle()
+    path = if props?.path? then props.path else editor.getPath()
+    localvars = if props?.vars? then props.vars else editor.getSelectedText()
 
     reclevels = 0
     while true

@@ -30,11 +30,11 @@ class Structure
 
       rd.on 'line', (line) ->
         level = line.split(/[^ ]/)[0].length
-        tempOpt = line.trim().split(/('.*?'|".*?"|\S+)/g)
+        tempOpt = line.trim().split(/(".*?"|\S+)/g)
         options = []
 
         for i in [0...tempOpt.length]
-          if not (tempOpt[i] is "" or tempOpt[i] is " ") 
+          if not (tempOpt[i] is "" or tempOpt[i] is " ")
             options.push(if tempOpt[i].match(/\".*\"/) then tempOpt[i].slice(1,-1) else tempOpt[i])
 
         line = options[0]
@@ -45,7 +45,6 @@ class Structure
           else
             paths[count].type = "f"
             paths[count].content = options[1]
-            console.log paths[count].content
 
         if options.length is 3 then paths[count].vars = options[2]
 

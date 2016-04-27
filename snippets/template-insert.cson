@@ -68,3 +68,6 @@
   "Temp Directory Variable":
     "prefix": "ot"
     "body": "}ot{${0:}"
+  "OS Release Variable":
+    "prefix": "or"
+    "body": "}or{${0:}"

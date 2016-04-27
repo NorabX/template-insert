@@ -1,7 +1,9 @@
 ## 2.0.0 - Atoemp Update
-* Read `.atoemp` template files
-* Grammar for `.atoemp` files
-* Snippets for `.atoemp` files
+* Add file structures
+* Read `.atoemp` and `.atp` template files
+* Read `.atoemps` and `.atps` structure files
+* Grammar for `.atoemp`, `.atoemps`, `.atp` and `.atps` files
+* Snippets for for `.atoemp`, `.atoemps`, `.atp` and `.atps` files
 * Some bugfixes and code restructuring
 
 ## 1.4.0 - Command Update

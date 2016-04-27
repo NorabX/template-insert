@@ -74,6 +74,11 @@ class Config
       description: 'Shows an error when a template is missing'
       default: true
       order: 90
+    showStructureDirectoryError:
+      type: 'boolean'
+      description: 'Shows an error when the structure directory is missing'
+      default: true
+      order: 95
     recursionVariableLevels:
       type: 'integer'
       min: 0
