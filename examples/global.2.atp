@@ -19,7 +19,11 @@ Custom variables directory: }vd{
 }=os{
 
 #File Path Variable "tempdir/source.coffee.1.atoemp"
-}!}td{source.coffee.1.atoemp!{
+Error Files:
+  }!asdfgghkjjlhgfdsa!{
+  }!}td{!{
+Correct File:
+  }!}td{source.coffee.1.atoemp!{
 
 #OS Varibales
 operating system CPU architecture: }oa{
@@ -39,3 +43,4 @@ whirlpool hash base64 of template: }whirlpool=template=base64{
 #Command Variable Examples
 java version: }>java -version 2>&1 | head -1<{
 node version: }>node -v<{
+error command: }>node -ve<{

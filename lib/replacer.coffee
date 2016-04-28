@@ -19,7 +19,7 @@ class Replacer
       if err then utils.addError "Template Directory Error", "Directory #{tempDir} doesn't exist"
       else
         if stats.isDirectory()
-          showError = utils.getConfig 'template-insert.showTemplateError'
+          showError = utils.getConfig 'showTemplateError'
           editor = atom.workspace.getActiveTextEditor()
           if editor
             scope = if global then 'global' else editor.getGrammar().scopeName
@@ -33,13 +33,15 @@ class Replacer
                 fs.accessSync filename
                 duplicates.push(filename)
                 break if duplicates.length > 1
-              catch e then console.log "#{filename} doesn't exist"
+              catch e
 
-            if duplicates.length is 1
-              fs.readFile duplicates[0], 'utf8', (err, data) ->
-                if err then if showError then utils.addError "Template is missing", "Add #{file}"
-                else self.insertData data, editor
-            else utils.addError "Template Duplicates", "Same Templates with different extensions:\n\n #{duplicates[0]}\n\n #{duplicates[1]}"
+            if duplicates.length is 0 then if showError then utils.addError "Template is missing", "Add #{file}"
+            else
+              if duplicates.length is 1
+                fs.readFile duplicates[0], 'utf8', (err, data) ->
+                  if err then if showError then utils.addError "Template is missing", "Add #{file}"
+                  else self.insertData data, editor
+              else utils.addError "Template Duplicates", "Same Templates with different extensions", "#{duplicates[0]}\n\n#{duplicates[1]}"
 
   replaceVariables: (data, editor, props) ->
     scopeName = if editor then editor.getGrammar().scopeName else 'global'
@@ -139,18 +141,22 @@ class Replacer
     data
 
   replaceCustomVariables: (data, scopeName) ->
-    if fs.existsSync utils.getConfig('customVariablesFile')
-      try
-        customvars = CSON.readFileSync(utils.getConfig('customVariablesFile'))
+    ccpath = utils.getConfig('customVariablesFile')
+    try
+      if fs.statSync(ccpath).isFile()
+        try
+          customvars = CSON.readFileSync(utils.getConfig('customVariablesFile'))
 
-        if customvars?
-          for scope in Object.keys(customvars)
-            for key in Object.keys(customvars[scope])
-              regex = new RegExp "}=#{key}{", 'g'
-              if scope is 'global' or scope is scopeName
-                data = data.replace regex, customvars[scope][key]
+          if customvars?
+            for scope in Object.keys(customvars)
+              for key in Object.keys(customvars[scope])
+                regex = new RegExp "}=#{key}{", 'g'
+                if scope is 'global' or scope is scopeName
+                  data = data.replace regex, customvars[scope][key]
 
-      catch err then utils.addError "Custom Variables File Syntax Error", "#{err}"
+        catch err then utils.addError "Custom Variables File Syntax Error", "#{err}"
+      else utils.addError "Custom Variables File Error", "#{ccpath} isn't a file"
+    catch e then utils.addError "Custom Variables File Error", "#{ccpath} doesn't exist!"
 
     data
 
@@ -170,10 +176,11 @@ class Replacer
       else tempPath = path
 
       if reclevels <= utils.getConfig('recursionPathLevels')
-        if fs.existsSync path
-          data = data.replace regex, fs.readFileSync path
-        else
-          data = data.replace regex, "}?#{path}?{"
+
+        try
+          if fs.statSync(path).isFile() then data = data.replace regex, fs.readFileSync path
+          else data = data.replace regex, "}?Path isn't a File: #{path}?{"
+        catch e then data = data.replace regex, "}?Doen't exist: #{path}?{"
       else
         reclevels = 0
         data = data.replace regex, "}#{path}{"
@@ -199,7 +206,7 @@ class Replacer
       if child.length > 0
         data = data.replace regex, child.toString()
       else
-        data = data.replace regex, "}?#{command}?{"
+        data = data.replace regex, "}?Unknown command: #{command}?{"
 
     data
 

@@ -33,7 +33,7 @@ Insert templates and file structres! Includes i.a. current timestamp support.
 * `}or{`: operating system release
 * `}on{`: operating system name
 * `}ot{`: default directory for temporary files
-* `}sd{`: structre directory
+* `}sd{`: structure directory
 * `}td{`: template directory
 * `}v{`: custom variables filename
 * `}V{`: absolute path of custom variables file

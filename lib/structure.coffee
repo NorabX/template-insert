@@ -4,6 +4,8 @@ Config = require './config'
 Replacer = require './replacer'
 utils = require './utils'
 readline = require 'readline'
+remote = require 'remote'
+dialog = remote.require 'dialog'
 
 module.exports =
 class Structure
@@ -16,8 +18,9 @@ class Structure
       file = com.file
       break if com.command is event.type
 
-    rootPath = event.currentTarget.getPath()
-    if fs.lstatSync(rootPath).isDirectory()
+    try
+      rootPath = dialog.showOpenDialog({properties:['openDirectory'],title:"Select a root folder"})[0]
+      atom.project.addPath(rootPath)
       rd = readline.createInterface(
         input: fs.createReadStream utils.getConfig("structureDirectory") + "/#{file}"
       )
@@ -79,7 +82,4 @@ class Structure
 
             fs.closeSync(file)
           else fs.mkdirSync(p.name)
-    else utils.addError "Root Path Error", "Root Path #{rootPath} is not a Directory!"
-
-  createStructure: (data) ->
-    console.log data
+    catch e

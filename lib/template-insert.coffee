@@ -76,15 +76,15 @@ module.exports = TemplateInsert =
     strcFiles = []
 
     fs.readdir strcDir, (err, tempFiles) ->
-      showError = utils.getConfig 'template-insert.showStructureDirectoryError'
-      if err then if showError then utils.addError "Structure Directory Error", "Directory #{strcDir} doesn't exist"
+      showError = utils.getConfig 'showStructureDirectoryError'
+      if err then if showError then utils.addError "Structure Directory Error", "Directory #{strcDir} doesn't exist", "You can disable this error in the settings"
       else
         for file in tempFiles
           if file.match(regex)
             filename = file.substring 0, file.lastIndexOf(exts[if file.lastIndexOf(exts[0]) > -1 then 0 else 1])
             com = "template-insert:create-structure-#{file}"
 
-            TemplateInsert.subscriptions.add atom.commands.add '.tree-view .selected',
+            TemplateInsert.subscriptions.add atom.commands.add '.tree-view-resizer',
               com, (event) => TemplateInsert.structure.create(event,strcFiles)
 
             strcFiles.push({file: file, command: com})
@@ -92,7 +92,7 @@ module.exports = TemplateInsert =
 
       if strcMenus.length > 0
         atom.contextMenu.add {
-            '.tree-view .selected':
+            '.tree-view-resizer':
               [{
                 label: 'Create Structure',
                 submenu: strcMenus
