@@ -84,7 +84,7 @@ module.exports = TemplateInsert =
             filename = file.substring 0, file.lastIndexOf(exts[if file.lastIndexOf(exts[0]) > -1 then 0 else 1])
             com = "template-insert:create-structure-#{file}"
 
-            TemplateInsert.subscriptions.add atom.commands.add '.tree-view-resizer',
+            TemplateInsert.subscriptions.add atom.commands.add '.tree-view',
               com, (event) => TemplateInsert.structure.create(event,strcFiles)
 
             strcFiles.push({file: file, command: com})
@@ -92,7 +92,7 @@ module.exports = TemplateInsert =
 
       if strcMenus.length > 0
         atom.contextMenu.add {
-            '.tree-view-resizer':
+            '.tree-view':
               [{
                 label: 'Create Structure',
                 submenu: strcMenus

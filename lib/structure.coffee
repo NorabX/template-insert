@@ -4,8 +4,8 @@ Config = require './config'
 Replacer = require './replacer'
 utils = require './utils'
 readline = require 'readline'
-remote = require 'remote'
-dialog = remote.Dialog
+remote = require('electron').remote
+dialog = remote.dialog
 
 module.exports =
 class Structure
@@ -82,4 +82,4 @@ class Structure
 
             fs.closeSync(file)
           else fs.mkdirSync(p.name)
-    catch e
+    catch e then console.log(e)
