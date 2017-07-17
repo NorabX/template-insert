@@ -54,6 +54,8 @@ module.exports = TemplateInsert =
     @modalPanel.destroy()
     @subscriptions.dispose()
     @grammarView.destroy()
+    @replacer.destroy()
+    @structure.destroy()
 
   serialize: ->
     grammarViewState: @grammarView.serialize()
