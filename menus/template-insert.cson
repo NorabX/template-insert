@@ -1,0 +1,103 @@
+menu: [
+  label: "Packages"
+  submenu: [
+    label: "Template Insert"
+    submenu: [
+      {
+        label: "Toggle Grammar"
+        command: "template-insert:toggle"
+      }
+      {
+        label: "Insert Sources"
+        submenu: [
+          {
+            label: "Source 1"
+            command: "template-insert:insert1"
+          }
+          {
+            label: "Source 2"
+            command: "template-insert:insert2"
+          }
+          {
+            label: "Source 3"
+            command: "template-insert:insert3"
+          }
+          {
+            label: "Source 4"
+            command: "template-insert:insert4"
+          }
+          {
+            label: "Source 5"
+            command: "template-insert:insert5"
+          }
+          {
+            label: "Source 6"
+            command: "template-insert:insert6"
+          }
+          {
+            label: "Source 7"
+            command: "template-insert:insert7"
+          }
+          {
+            label: "Source 8"
+            command: "template-insert:insert8"
+          }
+          {
+            label: "Source 9"
+            command: "template-insert:insert9"
+          }
+          {
+            label: "Source 10"
+            command: "template-insert:insert0"
+          }
+        ]
+
+      }
+      {
+        label: "Insert Globals"
+        submenu: [
+          {
+            label: "Global 1"
+            command: "template-insert:insert1g"
+          }
+          {
+            label: "Global 2"
+            command: "template-insert:insert2g"
+          }
+          {
+            label: "Global 3"
+            command: "template-insert:insert3g"
+          }
+          {
+            label: "Global 4"
+            command: "template-insert:insert4g"
+          }
+          {
+            label: "Global 5"
+            command: "template-insert:insert5g"
+          }
+          {
+            label: "Global 6"
+            command: "template-insert:insert6g"
+          }
+          {
+            label: "Global 7"
+            command: "template-insert:insert7g"
+          }
+          {
+            label: "Global 8"
+            command: "template-insert:insert8g"
+          }
+          {
+            label: "Global 9"
+            command: "template-insert:insert9g"
+          }
+          {
+            label: "Global 10"
+            command: "template-insert:insert0g"
+          }
+        ]
+      }
+    ]
+  ]
+]

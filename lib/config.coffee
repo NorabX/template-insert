@@ -77,7 +77,7 @@ class Config
     showStructureDirectoryError:
       type: 'boolean'
       description: 'Shows an error when the structure directory is missing'
-      default: true
+      default: false
       order: 95
     recursionVariableLevels:
       type: 'integer'

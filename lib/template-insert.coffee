@@ -98,3 +98,14 @@ module.exports = TemplateInsert =
                 submenu: strcMenus
               }]
         }
+
+        atom.menu.add [
+          label: "Packages"
+          submenu: [
+            label: "Template Insert"
+            submenu: [
+              label: 'Create Structure'
+              submenu: strcMenus
+            ]
+          ]
+        ]
