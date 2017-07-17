@@ -5,7 +5,7 @@ Replacer = require './replacer'
 utils = require './utils'
 readline = require 'readline'
 remote = require 'remote'
-dialog = remote.require 'dialog'
+dialog = remote.Dialog
 
 module.exports =
 class Structure
