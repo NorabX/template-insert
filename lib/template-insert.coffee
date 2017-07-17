@@ -48,7 +48,7 @@ module.exports = TemplateInsert =
 
 
     atom.packages.onDidActivateInitialPackages () ->
-      TemplateInsert.createTreeContextMenu()
+      TemplateInsert.createMenus()
 
   deactivate: ->
     @modalPanel.destroy()
@@ -68,12 +68,14 @@ module.exports = TemplateInsert =
         @grammarView.setText(grammar.name, grammar.scopeName)
         @modalPanel.show()
 
-  createTreeContextMenu: () ->
+  createMenus: () ->
     exts = [".atps",".atoemps"]
     regex = new RegExp ".*(#{exts[0]}|#{exts[1]})"
     strcDir = utils.getConfig 'structureDirectory'
     strcMenus = []
     strcFiles = []
+    strcMenus2 = []
+    strcFiles2 = []
 
     fs.readdir strcDir, (err, tempFiles) ->
       showError = utils.getConfig 'showStructureDirectoryError'
@@ -83,12 +85,19 @@ module.exports = TemplateInsert =
           if file.match(regex)
             filename = file.substring 0, file.lastIndexOf(exts[if file.lastIndexOf(exts[0]) > -1 then 0 else 1])
             com = "template-insert:create-structure-#{file}"
+            com2 = "template-insert:create-structure-#{file}-menu"
 
             TemplateInsert.subscriptions.add atom.commands.add '.tree-view',
               com, (event) => TemplateInsert.structure.create(event,strcFiles)
 
+            TemplateInsert.subscriptions.add atom.commands.add 'atom-workspace',
+              com2, (event) => TemplateInsert.structure.create(event,strcFiles2)
+
             strcFiles.push({file: file, command: com})
             strcMenus.push({label: filename, command: com})
+
+            strcFiles2.push({file: file, command: com2})
+            strcMenus2.push({label: filename, command: com2})
 
       if strcMenus.length > 0
         atom.contextMenu.add {
@@ -105,7 +114,7 @@ module.exports = TemplateInsert =
             label: "Template Insert"
             submenu: [
               label: 'Create Structure'
-              submenu: strcMenus
+              submenu: strcMenus2
             ]
           ]
         ]
