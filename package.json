@@ -1,7 +1,7 @@
 {
   "name": "template-insert",
   "main": "./lib/template-insert",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "author": "NorabX",
   "description": "Insert templates and file structres! Includes i.a. current timestamp support.",
   "keywords": [
