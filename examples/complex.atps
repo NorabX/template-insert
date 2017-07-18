@@ -1,0 +1,30 @@
+grammars
+  atoemp.cson "grammar settings"
+img d
+keymaps
+  template-insert.cson keymaps
+lib
+  views
+    grammar-view.coffee "view code"
+  config.coffee
+  replacer.coffee
+  structure.coffee
+  template-insert.coffee
+  utils.coffee
+menus
+  template-insert.cson
+node_modules
+  async
+    dist
+      async.js
+      async.min.js
+    lib
+      async.js
+    CHANGELOG.md
+    LICENSE
+    packages.json
+    README.md
+CHANGELOG.md
+LICENSE.md
+package.json
+README.md

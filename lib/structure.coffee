@@ -6,6 +6,7 @@ utils = require './utils'
 readline = require 'readline'
 remote = require('electron').remote
 dialog = remote.dialog
+$ = jQuery = require 'jquery'
 
 module.exports =
 class Structure
@@ -20,7 +21,6 @@ class Structure
 
     try
       rootPath = dialog.showOpenDialog({properties:['openDirectory'],title:"Select a root folder"})[0]
-      atom.project.addPath(rootPath)
       rd = readline.createInterface(
         input: fs.createReadStream utils.getConfig("structureDirectory") + "/#{file}"
       )
@@ -30,56 +30,78 @@ class Structure
       prevLevel = 0
       level = 0
       count = 0
+      tabsize = 0
+      checked = false
+      error = 0
+      linecount = 0
 
       rd.on 'line', (line) ->
-        level = line.split(/[^ ]/)[0].length
-        tempOpt = line.trim().split(/(".*?"|\S+)/g)
-        options = []
+        if error is 0
+          linecount = linecount + 1
 
-        for i in [0...tempOpt.length]
-          if not (tempOpt[i] is "" or tempOpt[i] is " ")
-            options.push(if tempOpt[i].match(/\".*\"/) then tempOpt[i].slice(1,-1) else tempOpt[i])
+          level = line.split(/[^ ]/)[0].length
+          if level > 0 and !checked
+            tabsize = level
+            checked = true
 
-        line = options[0]
-        paths.push({})
+          if level > 0
+            level = level/tabsize
 
-        if options.length > 1
-          if options[1] is "d" then paths[count].type = "d"
+          if (level-prevLevel) > 1
+            error = linecount
+
+          tempOpt = line.trim().split(/(".*?"|\S+)/g)
+          options = []
+
+          for i in [0...tempOpt.length]
+            if not (tempOpt[i] is "" or tempOpt[i] is " ")
+              options.push(if tempOpt[i].match(/\".*\"/) then tempOpt[i].slice(1,-1) else tempOpt[i])
+
+          line = options[0]
+          paths.push({})
+
+          if options.length > 1
+            if options[1] is "d" then paths[count].type = "d"
+            else
+              paths[count].type = "f"
+              paths[count].content = options[1]
+
+          if options.length is 3 then paths[count].vars = options[2]
+
+          if prevLevel is level
+            tempPath = (tempPath.slice 0, tempPath.lastIndexOf('/')) + "/#{line}"
           else
-            paths[count].type = "f"
-            paths[count].content = options[1]
+            if prevLevel < level
+              paths[count-1].leaf = false
+              paths[count-1].type = "d"
+            else
+              tempPath = tempPath.slice 0, tempPath.lastIndexOf('/') for i in [-1...(prevLevel-level)]
 
-        if options.length is 3 then paths[count].vars = options[2]
+            tempPath += "/#{line}"
+            prevLevel = level
 
-        if prevLevel is level
-          tempPath = (tempPath.slice 0, tempPath.lastIndexOf('/')) + "/#{line}"
-        else
-          if prevLevel < level
-            paths[count-1].leaf = false
-            paths[count-1].type = "d"
-          else
-            tempPath = tempPath.slice 0, tempPath.lastIndexOf('/') for i in [-1...(prevLevel-level)]
-
-          tempPath += "/#{line}"
-          prevLevel = level
-
-        paths[count].name = tempPath
-        paths[count].type = "f" if options.length is 1
-        paths[count].leaf = true
-        count++
+          paths[count].name = tempPath
+          paths[count].type = "f" if options.length is 1
+          paths[count].leaf = true
+          count++
 
       self = this
       rd.on 'close', () ->
-        for p in paths
-          if p.type is "f"
-            file = fs.openSync(p.name, 'w')
+        if error is 0
+          atom.project.addPath(rootPath)
 
-            if p.hasOwnProperty('content')
-              title = p.name.slice(p.name.lastIndexOf('/')+1)
-              properties = {title: title, path: p.name}
-              properties.vars = if p.hasOwnProperty('vars') then p.vars else ""
-              fs.writeFileSync(p.name, self.replacer.replaceVariables(p.content,null,properties))
+          for p in paths
+            if p.type is "f"
+              file = fs.openSync(p.name, 'w')
 
-            fs.closeSync(file)
-          else fs.mkdirSync(p.name)
-    catch e then console.log(e)
+              if p.hasOwnProperty('content')
+                title = p.name.slice(p.name.lastIndexOf('/')+1)
+                properties = {title: title, path: p.name}
+                properties.vars = if p.hasOwnProperty('vars') then p.vars else ""
+                fs.writeFileSync(p.name, self.replacer.replaceVariables(p.content,null,properties))
+
+              fs.closeSync(file)
+            else fs.mkdirSync(p.name)
+        else
+          utils.addError "Structure Failure", "A folder or a file has no parent directory", "Check your structure at line #{error}"
+    catch e then console.log e
